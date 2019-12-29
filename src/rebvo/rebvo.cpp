@@ -216,7 +216,7 @@ REBVO::REBVO(const char *configFile)
         InitOK&=config.GetConfigByName("Stereo","KcP1",params.kc_stereo.P1,true);
         InitOK&=config.GetConfigByName("Stereo","KcP2",params.kc_stereo.P2,true);
         cam_stereo=cam_model({params.pp_x_stereo,params.pp_y_stereo},{params.z_f_x_stereo,params.z_f_y_stereo},params.kc_stereo,params.ImageSize);
-    }else{
+    } else {
         cam_stereo=cam;
     }
 

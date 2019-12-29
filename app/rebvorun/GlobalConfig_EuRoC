@@ -1,4 +1,5 @@
 
+
 // ******  REBVO Configuration File ********
 // "&"  beginning sentences denote sections
 
@@ -11,11 +12,11 @@
 
     ReferencePoints=12000               //Reference to the number of points when autothreshold
     MaxPoints=16000                     //Absolute maximun number of points
-
+    TrackPoints=12000
     DetectorThresh=0.01                 //Manual theshold
-    DetectorAutoGain=5e-7               //Auto threshold gain, 0=manual
+    DetectorAutoGain=2e-7               //Auto threshold gain, 0=manual DetectorAutoGain=5e-7
 
-    DetectorMaxThresh=0.5              //Limits for autothreshold
+    DetectorMaxThresh=0.5              //Limits for autothreshold   0.5
     DetectorMinThresh=0.005
 
     DetectorPlaneFitSize=2                  //Window size for plane fitting to the DoG = (DetectorPlaneFitSize*2+1)^2
@@ -68,7 +69,8 @@
 
     ImageWidth=752									//Image size
     ImageHeight=480
-    FPS=20										//Frames per second
+    FPS=20	
+    SoftFPS=20									//Frames per second
     UseUndistort=1
     Rotate180=0
 
@@ -97,15 +99,15 @@
 
 &DataSetCamera
 
-    DataSetDir=/home/juan/Datasets/V2_02_medium/mav0/cam0/data/                           //The directory of the dataset
-    DataSetFile=/home/juan/Datasets/V2_02_medium/mav0/cam0/data.csv                       //The file of the dataset
-    DataSetDirStereo=/home/juan/Datasets/V2_02_medium/mav0/cam1/data/                           //The directory of the dataset
-    DataSetFileStereo=/home/juan/Datasets/V2_02_medium/mav0/cam1/data.csv                       //The file of the dataset
+    DataSetDir=/home/webster/Desktop/MH_03_medium/mav0/cam0/data1/                          //The directory of the dataset
+    DataSetFile=/home/webster/Desktop/MH_03_medium/mav0/cam0/data1.csv                       //The file of the dataset
+    DataSetDirStereo=/home/webster/Desktop/MH_03_medium/mav0/cam1/data/                           //The directory of the dataset
+    DataSetFileStereo=/home/webster/Desktop/MH_03_medium/mav0/cam1/data.csv                       //The file of the dataset
     TimeScale=1e-9
 
 &IMU
     ImuMode=2                                                          //1= use the archquitecture specific class, 2=load full data from ImuFile
-    ImuFile=/home/juan/Datasets/V2_02_medium/mav0/imu0/data.csv         //File containing the SE3 transformation from IMU to Camera
+    ImuFile=/home/webster/Desktop/MH_03_medium/mav0/imu0/data.csv        //File containing the SE3 transformation from IMU to Camera
     CamImuSE3File=se3_EuRoC.csv                                         //TimeScale of the IMU file
     TimeScale=1e-9
 
@@ -164,4 +166,3 @@
     CamaraT1=1
     CamaraT2=2
     CamaraT3=3
-

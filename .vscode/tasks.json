@@ -1,0 +1,43 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "make REBVOFLAGS=-m64",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "cmake -DCMAKE_BUILD_TYPE=Debug .. && make -j7",
+            "options": {
+                "cwd": "${workspaceFolder}/debug"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+{
+            "label": "build and run",
+            "type": "shell",
+            "command": "cmake .. && make -j7 VERBOSE=1 && echo \"Build Complete ################## \n\n\" && ./src/Sherlock",
+            "options": {
+                "cwd": "${workspaceFolder}/debug"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

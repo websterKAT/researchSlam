@@ -27,8 +27,8 @@
 #include <TooN/TooN.h>
 
 using namespace TooN;
-namespace  rebvo{
-edge_finder::edge_finder(cam_model &cam, float max_i_value, int kl_num_max)		//valor maximo de keypoints
+namespace  rebvo {
+edge_finder::edge_finder(cam_model &cam, float max_i_value, int kl_num_max)		//maximum keypoint value
     :cam_mod(cam),fsz(cam_mod.sz),max_img_value(max_i_value),
      img_mask_kl(fsz),kl_size(kl_num_max),kn(0)
 {
@@ -51,7 +51,7 @@ edge_finder::edge_finder(const edge_finder &ef)
 
 }
 
-edge_finder::~edge_finder()		//valor maximo de keypoints
+edge_finder::~edge_finder()		//maximum keypoint value
 {
 
     if(kl)
@@ -73,8 +73,6 @@ void edge_finder::build_mask(sspace *ss,        //State space containing image d
                              )
 {
 
-
-
     //Matrix used for plane fitting
     Matrix <Dynamic,Dynamic> Y((win_s*2+1)*(win_s*2+1),1);
     Vector <3> theta;
@@ -85,15 +83,15 @@ void edge_finder::build_mask(sspace *ss,        //State space containing image d
 
 
     if(PhiReCalc){
-
         Matrix <Dynamic,Dynamic,double> Phi((win_s*2+1)*(win_s*2+1),3);
-        for(int i=-win_s,k=0;i<=win_s;i++){
+        for(int i=-win_s,k=0;i<=win_s;i++) {
             for(int j=-win_s;j<=win_s;j++,k++){
                 Phi(k,0)=j;
                 Phi(k,1)=i;
                 Phi(k,2)=1;
             }
         }
+       
 
         PInv=util::Matrix3x3Inv(Phi.T()*Phi)*Phi.T();
         PhiReCalc=false;
@@ -107,7 +105,9 @@ void edge_finder::build_mask(sspace *ss,        //State space containing image d
     kn=0;
 
     //Start searching...
-    for(int y=win_s;y<fsz.h-win_s;y++){
+     //std::cout <<"win_s" << win_s;
+     //std::cout <<"height" << fsz.h;
+    for(int y=win_s+98;y<fsz.h-98-win_s;y++){
         for(int x=win_s;x<fsz.w-win_s;x++){
 
             int img_inx=img_mask_kl.GetIndex(x,y);  //Catch the image index
@@ -124,7 +124,8 @@ void edge_finder::build_mask(sspace *ss,        //State space containing image d
 
             for(int i=-win_s,k=0;i<=win_s;i++){
                 for(int j=-win_s;j<=win_s;j++,k++){             //For each pixel in a (2*win_sz+1)*(2*win_sz+1) window
-                    Y(k,0)=ss->ImgDOG()[(y+i)*fsz.w+x+j];       //Store DoG value on Y
+                    Y(k,0)=ss->ImgDOG()[(y+i)*fsz.w+x+j];   
+                    //printf("ffff %d",Y(k,0));   //Store DoG value on Y
                     if(ss->ImgDOG()[(y+i)*fsz.w+x+j]>0)         //
                         pn++;                                   //Increment pn if the DoG is positive
                     else
@@ -148,7 +149,7 @@ void edge_finder::build_mask(sspace *ss,        //State space containing image d
 
 
             if(fabs(xs)>0.5 || fabs(ys)>0.5)                             //if the zero crossing is outside pixel area, then is not an edge
-                continue;
+               continue;
 
 
             Point2DF mn={(float)theta[0],(float)theta[1]};              //doG gradient
@@ -171,7 +172,9 @@ void edge_finder::build_mask(sspace *ss,        //State space containing image d
             kl[kn].u_m.y=kl[kn].m_m.y/kl[kn].n_m;
 
             kl[kn].c_p={x+xs,y+ys};                 //Subpixel position of the edge
-
+            // std::cout <<"x value with precesion" << x+xs;
+            //std::cout <<"x values without precesion"<< x <<"\n";
+        
             kl[kn].p_m=cam_mod.Img2Hom(kl[kn].c_p); //Homogeneous position
             kl[kn].p_m_0=kl[kn].p_m;
 
@@ -195,13 +198,12 @@ void edge_finder::build_mask(sspace *ss,        //State space containing image d
             kl[kn].stereo_m_id=-1;
             kl[kn].stereo_rho=RhoInit;
             kl[kn].stereo_s_rho=RHO_MAX;
-
+            kl[kn].checked = 0;
 
             img_mask_kl[img_inx]=kn;    //Set the index of the keyline in the mask
 
 
             if(++kn>=kl_max){
-
                 for(++img_inx;img_inx<fsz.w*fsz.h;img_inx++){
                     img_mask_kl[img_inx]=-1;
                 }
@@ -234,10 +236,17 @@ inline int NextPoint(const int &x, const int &y,    //Keyline coordinate
 
             if((kl_inx=img_mask(x+1,y+0))>=0){
                 return kl_inx;                  //If presense, return KL index
+            } 
+
+            if((kl_inx=img_mask(x+2,y+0))>=0){
+                return kl_inx;
             }
 
-
             if((kl_inx=img_mask(x+0,y+1))>=0){
+                return kl_inx;
+            }
+
+            if((kl_inx=img_mask(x+0,y+2))>=0){
                 return kl_inx;
             }
 
@@ -246,16 +255,30 @@ inline int NextPoint(const int &x, const int &y,    //Keyline coordinate
                 return kl_inx;
             }
 
+            if((kl_inx=img_mask(x+2,y+2))>=0){
+                return kl_inx;
+            }
+
         }else{
             if((kl_inx=img_mask(x-1,y+0))>=0){
+                return kl_inx;
+            }
+            if((kl_inx=img_mask(x-2,y+0))>=0){
                 return kl_inx;
             }
 
             if((kl_inx=img_mask(x+0,y+1))>=0){
                 return kl_inx;
             }
+            if((kl_inx=img_mask(x+0,y+2))>=0){
+                return kl_inx;
+            }
 
             if((kl_inx=img_mask(x-1,y+1))>=0){
+                return kl_inx;
+            }
+            
+            if((kl_inx=img_mask(x-2,y+2))>=0){
                 return kl_inx;
             }
 
@@ -302,8 +325,8 @@ inline int NextPoint(const int &x, const int &y,    //Keyline coordinate
 //********************************************************************
 
 void edge_finder::join_edges(){
-
-    for(int ikl=0;ikl<kn;ikl++){
+    
+    for(int ikl=0;ikl<kn;ikl++) {
 
         int x=util::round2int_positive(kl[ikl].c_p.x);
         int y=util::round2int_positive(kl[ikl].c_p.y);  //KeyLine image coordinate
@@ -316,7 +339,64 @@ void edge_finder::join_edges(){
         kl[ikl].n_id=ikl2;
 
     }
+    
+    for(int fil=0;fil<kn;fil++){
+        //printf("inside for\n");
+        int maximumLength= 10;
+        if(kl[fil].checked == 0){
+            //printf("if checked == 0\n");
+            int length=0;
+            int nextKl = fil;
+            int prevKl = fil;
+            while(length <= maximumLength && (kl[prevKl].p_id != -1 || kl[nextKl].n_id != -1)){
+                //printf("first while \n");
+                if(kl[nextKl].n_id != -1) {
+                    kl[nextKl].checked = 1;
+                    length++;
+                    nextKl = kl[nextKl].n_id; 
+                }
 
+                if(kl[prevKl].p_id != -1) {
+                    kl[prevKl].checked = 1;
+                    length++;
+                    prevKl = kl[prevKl].p_id;
+                }
+            }
+
+            if(length <= maximumLength){
+                int nextKl_r = fil;
+                int prevKl_r = fil;
+                int p,q,r,s,imageIndex1,imageIndex2;
+                while((kl[prevKl_r].p_id != -1 || kl[nextKl_r].n_id != -1)){
+                if(kl[nextKl_r].n_id != -1) {
+                    kl[nextKl_r].checked = -1;
+                    p = util::round2int_positive(kl[nextKl_r].c_p.x);
+                    q = util::round2int_positive(kl[nextKl_r].c_p.y);
+                    imageIndex1 =  img_mask_kl.GetIndex(p,q);
+                    img_mask_kl[imageIndex1] =-1;
+                    ///kl[nextKl_r].c_p.x = 0;
+                    //kl[nextKl_r].c_p.y =0;
+                    nextKl_r = kl[nextKl_r].n_id; 
+                    
+                }
+                //printf("inside if , while \n");
+
+                if(kl[prevKl_r].p_id != -1) {
+                    kl[prevKl_r].checked = -1;
+                    r = util::round2int_positive(kl[prevKl_r].c_p.x);
+                    s = util::round2int_positive(kl[prevKl_r].c_p.y);
+                    imageIndex2 =  img_mask_kl.GetIndex(r,s);
+                    img_mask_kl[imageIndex2] =-1;
+                    ///kl[prevKl_r].c_p.x = -1;
+                   // kl[prevKl_r].c_p.y = -1;
+                    prevKl_r = kl[prevKl_r].p_id;
+                }
+            }
+
+        }
+
+    }
+    }
 }
 
 
@@ -353,7 +433,6 @@ void edge_finder::detect(sspace *ss,
                          )
 {
 
-
     if(gain>0)
         UpdateThresh(tresh,l_kl_num,kl_ref,gain,thresh_max,thresh_min);     //Autogain threshold
 
@@ -362,6 +441,7 @@ void edge_finder::detect(sspace *ss,
     join_edges();   //Join consecutive KeyLines
 
     l_kl_num=kn;    //Save the number of effective KL detected
+    //printf("\n effective keylines %d",l_kl_num);
 }
 
 

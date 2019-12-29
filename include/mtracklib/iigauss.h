@@ -30,10 +30,10 @@ class iigauss : public iimage
 {
 public:
     int box_n;			    //cantidad de filtros caja
-    double sigma;		    //sigma objetivo
-    double sigma_r;		    //sigma obtenido
+    double sigma;		    //objective sigma 
+    double sigma_r;		    //sigma obtained
     int *box_d;			    //ancho de cada filtro caja
-    Image<DetectorImgType> *div;	//los divisores para cada filtro
+    Image<DetectorImgType> *div;	//lthe dividers for each filter
 
     iigauss(const Size2D &size,double sigma,int box_num);
     ~iigauss();

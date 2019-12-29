@@ -57,6 +57,7 @@ VideoCam * REBVO::initCamera(){
         break;
     case 0:
     default:
+        cout << "returning to camerammmmmmmmmmmmmm" << endl;
         return new v4lCam(params.CameraDevice.data(), cam.sz,
                 params.config_fps, params.SimFile.data());
         break;
@@ -110,14 +111,14 @@ void REBVO::FirstThr(REBVO *cf) {
     VideoCam *camara=cf->initCamera();
 
 	if (camara->Error()) {
-        cout << "REBVO: Failed to initialize the main camera " << endl;
+        cout << "REBVO: Failed to initialize the main camera problem here" << endl;
 		cf->quit = true;
 		return;
 	}
 
     VideoCam *camara_pair=nullptr;
 
-    if(cf->params.StereoAvaiable){
+    if(cf->params.StereoAvaiable) {
 
         camara_pair=cf->initPairCamera();
         if (!camara_pair || camara->Error()) {
@@ -155,7 +156,7 @@ void REBVO::FirstThr(REBVO *cf) {
             while(!cf->frame_by_frame_advance)
                 usleep(1e5);
             cf->frame_by_frame_advance=false;
-            std::cout <<"Advancing frame...\n";
+            std::cout << "Advancing frame...\n";
         }
 
         while(1){
@@ -180,7 +181,7 @@ void REBVO::FirstThr(REBVO *cf) {
 
 
 
-        //********* Grab and sync stereo frame *****************//
+        /********************* Grab and sync stereo frame *****************/
 
         if(cf->params.StereoAvaiable){
 
@@ -210,14 +211,13 @@ void REBVO::FirstThr(REBVO *cf) {
 
 		if (cf->params.useUndistort) {
 
-            if (cf->params.rotatedCam){
+            if (cf->params.rotatedCam) {
 				img_dist.copyFromRotate180(data); //copy buffer for fast release and rotate 180 deg
 
                 if(cf->params.StereoAvaiable)
                     img_dist_pair.copyFromRotate180(data_pair);
-            }else{
+            } else {
 				img_dist = data;              //copy buffer for fast release
-
                 if(cf->params.StereoAvaiable)
                     img_dist_pair=data_pair;
             }
@@ -242,7 +242,7 @@ void REBVO::FirstThr(REBVO *cf) {
                 if(cf->params.StereoAvaiable)
                     (*pbuf.imgc_pair).copyFromRotate180(data_pair);
 
-            }else{
+            } else {
 				(*pbuf.imgc) = data;              //copy buffer for fast release
 
                 if(cf->params.StereoAvaiable)
@@ -315,8 +315,7 @@ void REBVO::FirstThr(REBVO *cf) {
 
 		COND_TIME_DEBUG(printf("\nCamaraFrontal: dtp0 = %f, kln=%d thresh=%f dt=%f\n",dtp,l_kl_num,tresh,dt);)
 
-		//Save time, processing time and frame Id
-		pbuf.t = t;
+ 		pbuf.t = t;
 		pbuf.dtp0 = dtp;
 		pbuf.p_id = p_num - 1;
 		pbuf.quit = false;

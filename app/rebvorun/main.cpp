@@ -34,7 +34,7 @@ void PrintHelp(){
 
     std::cout<<R"help(
                REBVO Commands:
-               q: Quit
+               q: Quitooooooooo
                r: Reset
                s: Save KF and Quit
                p: Take Snapshot

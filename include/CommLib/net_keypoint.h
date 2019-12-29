@@ -80,7 +80,7 @@ struct net_packet_hdr{
 #pragma pack(pop)
 
 
-struct upk_net_keypoint{
+struct upk_net_keypoint {   
 
     float qx;
     float qy;

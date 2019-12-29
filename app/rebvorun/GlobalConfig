@@ -10,7 +10,8 @@
     KSigma=1.2599                       //1.7818 2.30029 2.72174 3.56359
 
     ReferencePoints=6000               //Reference to the number of points when autothreshold
-    MaxPoints=7000                     //Absolute maximun number of points
+    MaxPoints=7000   
+    TrackPoints=6000                  //Absolute maximun number of points
 
     DetectorThresh=0.01                 //Manual theshold
     DetectorAutoGain=5e-7               //Auto threshold gain, 0=manual
@@ -67,7 +68,8 @@
     KcP2=0.00049
     ImageWidth=320									//Image size
     ImageHeight=240
-    FPS=50										//Frames per second
+    FPS=50
+    SoftFPS=20										//Frames per second
     UseUndistort=0
     Rotate180=0
 
@@ -93,17 +95,18 @@
     TrayFile=rebvo_tray.txt                                                             //Trayectory in TUM dataset format [t pos quat]
 
     StereoAvaiable=0
-
+    TrackKeyFrames=1
+    KFSavePercent=0.7
 
 &DataSetCamera
 
-    DataSetDir=/home/odroid/Datasets/MH_03_medium/mav0/cam0/data/                        //The directory of the dataset
-    DataSetFile=/home/odroid/Datasets/MH_03_medium/mav0/cam0/data.csv                    //The file of the dataset
+    DataSetDir=/home/webster/Desktop/MH_03_medium/mav0/cam0/data/                        //The directory of the dataset
+    DataSetFile=/home/webster/Desktop/MH_03_medium/mav0/cam0/data.csv                    //The file of the dataset
     TimeScale=1e-9
 
 &IMU
     ImuMode=0                                                                            //1= use the archquitecture specific class, 2=load full data from ImuFile
-    ImuFile=/home/odroid/Datasets/MH_03_medium/mav0/imu0/data.csv                        //
+    ImuFile=/home/webster/Desktop/MH_03_medium/mav0/imu0/data.csv                        //
     CamImuSE3File=se3.csv                                                                //File containing the SE3 transformation from IMU to Camera
     TimeScale=1                                                     //TimeScale of the IMU file
 

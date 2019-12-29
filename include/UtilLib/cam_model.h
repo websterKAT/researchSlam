@@ -28,7 +28,7 @@
 #include "VideoLib/common_types.h"
 #include "util.h"
 #include <math.h>
-namespace  rebvo{
+namespace  rebvo {
 
 struct cam_model{
 

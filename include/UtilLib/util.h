@@ -32,7 +32,7 @@
 #include "timer.h"
 #include "fvector.h"
 namespace  rebvo{
-namespace util{
+namespace util {
 
     const double sqrt_2_pi=2.506628274631;
     const double num_inf=1e20;

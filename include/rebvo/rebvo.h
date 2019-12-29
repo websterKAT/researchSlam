@@ -642,3 +642,6 @@ public:
 }
 
 #endif // REBVO_H
+
+
+//w_RS_S_x [rad s^-1],w_RS_S_y [rad s^-1],w_RS_S_z [rad s^-1],a_RS_S_x [m s^-2],a_RS_S_y [m s^-2],a_RS_S_z [m s^-2]

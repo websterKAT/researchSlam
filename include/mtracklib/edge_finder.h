@@ -22,7 +22,7 @@
  *******************************************************************************/
 
 
- #ifndef EDGE_FINDER_H
+#ifndef EDGE_FINDER_H
 #define EDGE_FINDER_H
 
 #include "sspace.h"
@@ -82,7 +82,7 @@ struct KeyLine{
         int p_id;           //Id of previous consecutive KeyLine
         int n_id;           //Id of next consecutive KeyLine
         int net_id;         //Network ID of the KeyLine
-
+        int checked;
 
         int stereo_m_id;
         double stereo_rho;         //Estimated Inverse Depth from stereo

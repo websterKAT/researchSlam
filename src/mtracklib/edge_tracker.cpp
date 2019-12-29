@@ -257,7 +257,7 @@ int edge_tracker::search_match(
 
             if((inx=img_mask_kl.GetIndexRC(t_x*t+pi0.x,t_y*t+pi0.y))<0)  //Image position to seach for,
                 continue;                                               // -1 means out of border
-
+    
 
             if((j=img_mask_kl[inx])>=0){        //If there is an edge at this position
 
@@ -427,7 +427,7 @@ int edge_tracker::FordwardMatch(edge_tracker *et    //Edgemap to match to
         nmatch++;
 
     }
-
+    //printf("no of Mathces: %d",nmatch);
     et->nmatch=nmatch;
 
     return nmatch;
@@ -869,7 +869,7 @@ double edge_tracker::UpdateInverseDepthKalmanSimple(KeyLine &kli,
     q0y=kli.p_m_0.y;
 
 
-    double v_rho=kli.s_rho*kli.s_rho;   //IDepth variance
+    double v_rho=kli.s_rho*kli.s_rho;   //IDepth    
 
     double u_x=kli.m_m0.x/kli.n_m0;     //Shortcut for edge perpendicular direction
     double u_y=kli.m_m0.y/kli.n_m0;

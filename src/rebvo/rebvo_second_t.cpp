@@ -40,12 +40,9 @@ using namespace std;
 namespace  rebvo{
 
 
-void  REBVO::SecondThread(REBVO *cf){
+void  REBVO::SecondThread(REBVO *cf) {
 
     using namespace TooN;
-
-
-
     double dt_frame;
 
     COND_TIME_DEBUG(double dtp;)
@@ -91,7 +88,7 @@ void  REBVO::SecondThread(REBVO *cf){
 
     if(cf->params.cpuSetAffinity){
         if(!REBVO::setAffinity(cf->params.cpu1)){
-            std::cout <<"REBVO: Cannot set cpu affinity on the second thread";
+            std::cout << "REBVO: Cannot set cpu affinity on the second thread";
             cf->quit=true;
         }
     }
@@ -188,13 +185,13 @@ void  REBVO::SecondThread(REBVO *cf){
 
                     g_init-=new_buf.imu.cacel;
                     //giro_init+=istate.dWv;
-                    if(++n_giro_init>cf->params.InitBiasFrameNum){
+                    if(++n_giro_init>cf->params.InitBiasFrameNum) {
                         istate.Bg=giro_init/n_giro_init;
                         istate.init=true;
                         istate.W_Bg=util::Matrix3x3Inv(istate.RGBias*1e2);
                         istate.X.slice<1,3>()=g_init/n_giro_init;
                     }
-                }else{
+                } else{
                     istate.init=true;
                     istate.Bg=cf->params.BiasInitGuess*new_buf.imu.dt;
                 }
@@ -337,7 +334,6 @@ void  REBVO::SecondThread(REBVO *cf){
 
         }else{                  //Regular procesing
             COND_TIME_DEBUG(tlist.push_new();)
-
             #ifdef USE_NE10
             TooN::Matrix<6,6,float> W_X;
             new_buf.gt->Minimizer_RV<float>(V,W,P_V,P_W,*old_buf.ef,cf->params.TrackerMatchThresh,cf->params.TrackerIterNum,cf->params.TrackerInitType,cf->params.ReweigthDistance,error_vel,error_score,s_rho_q,cf->params.MatchNumThresh,cf->params.TrackerInitIterNum,W_X);
@@ -347,7 +343,7 @@ void  REBVO::SecondThread(REBVO *cf){
             #endif
 
 
-
+            //printf("no imu DATA");
             COND_TIME_DEBUG(tlist.push_new();)
 
             //***** Match from the old EdgeMap to the new one using the information from the minimization *****
@@ -408,9 +404,9 @@ void  REBVO::SecondThread(REBVO *cf){
 
             //Because the old edge map mask is used, New keylines and Translation are back rotated
             klm_num=new_buf.ef->directed_matching(V,P_V,R,old_buf.ef,num_kf_back_m,cf->params.MatchThreshModule,cf->params.MatchThreshAngle,cf->params.SearchRange,cf->params.LocationUncertaintyMatch,cf->params.StereoAvaiable);
-
+            
             if(klm_num<cf->params.MatchThreshold){     //If matching keylines are below a certain threshold, reestart the estimation
-
+                 
                 P_V=Identity*1e50;
                 V=Zeros;
 

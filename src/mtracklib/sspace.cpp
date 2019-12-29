@@ -23,7 +23,7 @@
 
 #include "mtracklib/sspace.h"
 #include <iostream>
-namespace  rebvo{
+namespace  rebvo {
 /*
 
   Esta clase implementa el espacio de escalas (Lindenberg 94,98 y otros...) a la Lowe et. al. (SIFT)
@@ -62,9 +62,10 @@ void sspace::build(Image<DetectorImgType> &data){
 
 void sspace::build_dog(){
 
-
+    //printf("scale size %d",dog.bSize()); = 360960
     for(int k=0;k<dog.bSize();k++){
         dog[k]=img[1][k]-img[0][k];
+        //printf("dddd: %f \n",dog[k]);
     }
 
 }
@@ -73,8 +74,6 @@ void sspace::build_dog(){
 // calc_gradient() calcula el gradiante con respecto a x e y para una escala determinada
 
 void sspace::calc_gradient(){
-
-
     for(int y=1;y<img_dx.Size().h-1;y++){
         for(int x=1;x<img_dx.Size().w-1;x++){
             img_dx(x,y)=img[0](x+1,y)-img[0](x-1,y);

@@ -31,7 +31,7 @@
 
 #include "VideoLib/video_io.h"
 
-namespace  rebvo{
+namespace  rebvo {
 
 static void xioctl(int fh, int request, void *arg)
 {

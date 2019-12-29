@@ -28,17 +28,17 @@
 #include <iostream>
 namespace  rebvo{
 /*
-    Siguiendo la idea de Kovesi, utilizo aplicaciones sucesivas de filtros de caja, con
-    imagenes integrales, para aproximar una filtrao gausseano de gran eficiencia
+   Following the idea of ​​Kovesi, I use successive applications of box filters, with
+    integral images, to approximate a highly efficient Gaussian filtering
 
 */
 
 
-//El constructor calcula los filtros de caja nesesarios para aproximar un cierto sigma
-//(deviacion gausseana), dado la cantintidad de filtros a utilizar ( box_num )
-//para mejorar la aproximacion Kovesi propone utilizar dos tamaños de filtro distindo:
-//m filtros de tamaño wl y bon_num-m de tamaño wl+2. Ademas, para que el filtro este
-//centrado sobre un punto wl debe ser impar (y entero..).
+// The builder calculates the necessary box filters to approximate a certain sigma
+// (Gaussian deviation), given the number of filters to use (box_num)
+// to improve the approach Kovesi proposes to use two different filter sizes:
+// m filters of size wl and bon_num-m of size wl + 2. Also, so that the filter is
+// centered on a point wl must be odd (and integer ..).
 
 iigauss::iigauss(const Size2D &size, double sigma, int box_num)
     :iimage(size)
@@ -90,11 +90,11 @@ iigauss::~iigauss(){
 
 void iigauss::smooth(Image<DetectorImgType> &in, Image<DetectorImgType> &out){
 
-    load(in);						//genera la primera imagen integral
-
+    load(in);						//generates the first integral image
+    //printf("box-d %d",box_n);
     for(int i=0;i<box_n-1;i++){
-        average(out,img_data,box_d[i],div[i]);		//filtro de caja
-        load(out);					//regenera la imagen integral
+        average(out,img_data,box_d[i],div[i]);		//integral filter box
+        load(out);					//regenerates the integral image
     }
 
     average(out,img_data,box_d[box_n-1],div[box_n-1]);	//ultimo filtrado
